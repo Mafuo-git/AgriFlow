@@ -6,5 +6,5 @@
 CND_BASEDIR=`pwd`
 # default configuration
 CND_ARTIFACT_DIR_default=dist/default/production
-CND_ARTIFACT_NAME_default=AgriFlow.production.hex
-CND_ARTIFACT_PATH_default=dist/default/production/AgriFlow.production.hex
+CND_ARTIFACT_NAME_default=pepiniere.X.production.hex
+CND_ARTIFACT_PATH_default=dist/default/production/pepiniere.X.production.hex
