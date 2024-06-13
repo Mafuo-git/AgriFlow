@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=pepiniere.X
+PROJECTNAME=AgriFlow
 
 # Active Configuration
 DEFAULTCONF=default
