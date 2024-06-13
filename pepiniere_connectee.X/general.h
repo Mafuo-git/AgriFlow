@@ -1,78 +1,48 @@
-/* Microchip Technology Inc. and its subsidiaries.  You may use this software 
- * and any derivatives exclusively with Microchip products. 
- * 
- * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER 
- * EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY IMPLIED 
- * WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A 
- * PARTICULAR PURPOSE, OR ITS INTERACTION WITH MICROCHIP PRODUCTS, COMBINATION 
- * WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION. 
+/*
+ * File:   general.h
+ * Author: lal
  *
- * IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
- * INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND 
- * WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS 
- * BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE 
- * FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS 
- * IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF 
- * ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
- *
- * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
- * TERMS. 
+ * Created on 13 mars 2015, 14:48
  */
 
-/* 
- * File:   
- * Author: 
- * Comments:
- * Revision history: 
- */
+#ifndef _GENERAL_H
+#define _GENERAL_H
 
-// This is a guard condition so that contents of this file are not included
-// more than once.  
-#ifndef XC_HEADER_TEMPLATE_H
-#define	XC_HEADER_TEMPLATE_H
+// Booleans
+#define TRUE            1           // allow TRUE to equal 1
+#define FALSE           0           // allow FALSE to equal 0
+#define forever         while(TRUE) // endless loop
 
-#include <xc.h> // include processor files - each processor file is guarded.  
+// Following definitions are equivalent (depending on the context), but SET or CLEAR are sufficient
+#define SET             1           // allow SET to equal 1
+#define CLEAR           0           // allow CLEAR to equal 0
 
-// TODO Insert appropriate #include <>
+#define ENABLE          SET         // allow ENABLE to equal 1
+#define DISABLE         CLEAR       // allow DISABLE to equal 0
 
-// TODO Insert C++ class definitions if appropriate
+#define READ            SET         // allow READ to equal 1
+#define WRITE           CLEAR       // allow WRITE to equal 0
 
-// TODO Insert declarations
+#define ON              SET         // allow ON to equal 1
+#define OFF             CLEAR       // allow OFF to equal 0
 
-// Comment a function and leverage automatic documentation with slash star star
-/**
-    <p><b>Function prototype:</b></p>
-  
-    <p><b>Summary:</b></p>
+#define INP             SET         // PORT bit is in input mode
+#define OUTP            CLEAR       // PORT bit is in output mode
 
-    <p><b>Description:</b></p>
+#define OUTP_HIGH	SET         // high level
+#define OUTP_LOW	CLEAR       // low level
 
-    <p><b>Precondition:</b></p>
+// Internal oscillator frequency
+#define _XTAL_FREQ	1000000UL   // default XTAL frequency is 1MHz (FOSC=250kHz)
+                                    // (used by inline function _delay)
+                                    // TCY = (1 / (_XTAL_FREQ / 4)) = 4µs
 
-    <p><b>Parameters:</b></p>
+// New typedefs
+typedef unsigned char	UINT8_T;    // UINT8_T means byte (8-bit)
+typedef unsigned int	UINT16_T;   // UINT16_T means word(16-bit)
+typedef unsigned char	BOOL;       // BOOL means byte (8-bit)
+typedef char         BYTE;
+typedef char            INT8_T;     // INT8_T means 2's complement (1 sign bit + 7-bit)
+typedef int             INT16_T;    // INT16_T means 2's complement (1 sign bit + 15-bit)
 
-    <p><b>Returns:</b></p>
-
-    <p><b>Example:</b></p>
-    <code>
- 
-    </code>
-
-    <p><b>Remarks:</b></p>
- */
-// TODO Insert declarations or function prototypes (right here) to leverage 
-// live documentation
-
-#ifdef	__cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-    // TODO If C++ is being used, regular C code needs function names to have C 
-    // linkage so the functions can be used by the c code. 
-
-#ifdef	__cplusplus
-}
-#endif /* __cplusplus */
-
-#endif	/* XC_HEADER_TEMPLATE_H */
-
+#endif /* _GENERAL_H */
