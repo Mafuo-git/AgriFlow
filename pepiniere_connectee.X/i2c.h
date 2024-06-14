@@ -17,7 +17,7 @@
 #define I2C_SCL             LATCbits.RC3            // I2C SCL pin
 #define I2C_SDA             LATCbits.RC4            // I2C SDA pin
 
-#define TC74_ADDRESS        0b01001101              // TC74 address
+#define SONDE_ADDRESS        0x20              // TC74 address
 
 #define I2C_READ            READ                    // I2C read mode
 #define I2C_WRITE           WRITE                   // I2C write mode
@@ -32,6 +32,6 @@ UINT8_T i2c_read(void);
 void i2c_write(UINT8_T data);
 void i2c_ACK(void);
 void i2c_NAK(void);
-
+void SONDE_ReadHumidity(uint8_t *humidity);
 #endif /* _I2C_H */
 

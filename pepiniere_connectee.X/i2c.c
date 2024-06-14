@@ -107,3 +107,35 @@ void i2c_write(UINT8_T i2cWriteData) {
     SSP1BUF = i2cWriteData;                     // set i2c buffer
     while (!PIR1bits.SSP1IF);                   // wait for interrupt
 }
+
+void SONDE_ReadHumidity(uint8_t *humidity) {
+    uint8_t temp[6];
+
+    i2c_start();
+    i2c_write((SONDE_ADDRESS << 1) | 0); // Écrire à l'adresse du SHT31
+    i2c_write(0x2C); // Envoyer le MSB de la commande de mesure
+    i2c_write(0x06); // Envoyer le LSB de la commande de mesure
+    i2c_stop();
+    
+    __delay_ms(500); // Attendre la fin de la mesure (500ms)
+
+    i2c_start();
+    i2c_write((SONDE_ADDRESS << 1) | 1); // Lire à l'adresse du SHT31
+
+    for (uint8_t i = 0; i < 6; i++) {
+        temp[i] = i2c_read();
+        if (i < 5) {
+            i2c_ACK();
+        } else {
+            i2c_NAK();
+        }
+    }
+    i2c_stop();
+
+    // Calculer l'humidité
+    uint16_t SRH;
+
+    SRH = ((uint16_t)temp[3] << 8) | temp[4];
+
+    *humidity = 100 * ((float)SRH / 65535);
+}

@@ -13,6 +13,8 @@
 #include <stdint.h>
 #include "general.h"
 #include "uart.h"
+#include "i2c.h"
+#include "lcd.h"
 #include <xc.h>
 
 
@@ -117,7 +119,21 @@ int main(int argc, char** argv) {
     
     UARTInit(9600);            // init UART @ 9600 bps
     
-   
+   OSCCON = 0x72; // Configurer l'oscillateur à 16 MHz
+    i2c_init(); // Initialiser l'I2C
+
+    uint8_t humidity;
     forever { 
+        SONDE_ReadHumidity(&humidity); // Lire les données de la sonde
+
+        // Afficher l'humidité lue (par exemple, via LCD ou UART)
+        LCDClear();
+        LCDGoto(0, 0);
+        LCDWriteStr("Humidite:");
+        LCDGoto(0, 1);
+        LCDWriteInt(humidity);
+        LCDPutChar('%');
+
+        __delay_ms(1000); // Attendre 1 seconde avant la prochaine lecture
     }       // end of loop forever
 }
