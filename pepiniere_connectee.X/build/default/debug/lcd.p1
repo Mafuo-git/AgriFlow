@@ -834,7 +834,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;lcd.c: 33:     __nop();
 [e ( ___nop ..  ]
 "35
-[; ;lcd.c: 35:     status = PORTD << 4;
+[; ;lcd.c: 35:     status = (UINT8_T)(PORTD << 4);
 [e = _status -> << -> _PORTD `i -> 4 `i `uc ]
 "36
 [; ;lcd.c: 36:     LATDbits.LATD6 = 0;
@@ -1278,8 +1278,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;lcd.c: 217:     integer = (UINT16_T)(value * 100) % 1000;
 [e = _integer % -> * _value -> -> 100 `i `f `ui -> -> 1000 `i `ui ]
 "218
-[; ;lcd.c: 218:     string[0] = integer / 100 + '0';
-[e = *U + &U _string * -> -> -> 0 `i `ui `ux -> -> # *U &U _string `ui `ux -> + / _integer -> -> 100 `i `ui -> 48 `ui `uc ]
+[; ;lcd.c: 218:     string[0] = (char)(integer / 100) + '0';
+[e = *U + &U _string * -> -> -> 0 `i `ui `ux -> -> # *U &U _string `ui `ux -> + -> -> / _integer -> -> 100 `i `ui `uc `ui -> 48 `ui `uc ]
 "219
 [; ;lcd.c: 219:     string[1] = '.';
 [e = *U + &U _string * -> -> -> 1 `i `ui `ux -> -> # *U &U _string `ui `ux -> -> 46 `ui `uc ]

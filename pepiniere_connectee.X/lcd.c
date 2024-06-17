@@ -32,7 +32,7 @@ UINT8_T ReadByte(void)
     Nop();
     Nop();
 
-    status = PORTD << 4;
+    status = (UINT8_T)(PORTD << 4);
     LCD_EN = DISABLE;
 
     LCD_EN = ENABLE;
@@ -215,7 +215,7 @@ void LCDWriteFloat(UINT8_T column, UINT8_T row, float value) {
     char string[5];
 
     integer = (UINT16_T)(value * 100) % 1000;
-    string[0] = integer / 100 + '0';
+    string[0] = (char)(integer / 100) + '0';
     string[1] = '.';
     string[2] = (integer / 10) % 10 + '0';
     string[3] = integer % 10 + '0';

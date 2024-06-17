@@ -436,7 +436,6 @@ UINT8_T i2c_read(void);
 void i2c_write(UINT8_T data);
 void i2c_ACK(void);
 void i2c_NAK(void);
-void SONDE_ReadHumidity(uint8_t *humidity);
 # 16 "RX_LoRa.c" 2
 
 # 1 "./lcd.h" 1
@@ -10010,27 +10009,5 @@ void fermer_vanne(){
 }
 
 int main(int argc, char** argv) {
-
-
-    uint8_t i;
-
-    UARTInit(9600);
-
-   OSCCON = 0x72;
-    i2c_init();
-
-    uint8_t humidity;
-    while(1) {
-        SONDE_ReadHumidity(&humidity);
-
-
-        LCDClear();
-        LCDGoto(0, 0);
-        LCDWriteStr("Humidite:");
-        LCDGoto(0, 1);
-        LCDWriteInt(humidity);
-        LCDPutChar('%');
-
-        _delay((unsigned long)((1000)*(1000000UL/4000.0)));
-    }
+# 158 "RX_LoRa.c"
 }

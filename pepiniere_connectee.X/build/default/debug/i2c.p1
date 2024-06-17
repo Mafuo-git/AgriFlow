@@ -179,10 +179,6 @@ Version 4.0 HI-TECH Software Intermediate Code
 "15259
 [; ;C:/Program Files/Microchip/MPLABX/v6.20/packs/Microchip/PIC18F-K_DFP/1.13.292/xc8\pic\include\proc\pic18f46k22.h: 15259: extern volatile unsigned char SSP1BUF __attribute__((address(0xFC9)));
 [v _SSP1BUF `Vuc ~T0 @X0 0 e@4041 ]
-[v F526 `(v ~T0 @X0 1 tf1`ul ]
-"20 C:\Program Files\Microchip\xc8\v2.46\pic\include\builtins.h
-[v __delay `JF526 ~T0 @X0 0 e ]
-[p i __delay ]
 "54 C:/Program Files/Microchip/MPLABX/v6.20/packs/Microchip/PIC18F-K_DFP/1.13.292/xc8\pic\include\proc\pic18f46k22.h
 [; ;C:/Program Files/Microchip/MPLABX/v6.20/packs/Microchip/PIC18F-K_DFP/1.13.292/xc8\pic\include\proc\pic18f46k22.h: 54: __asm("ANSELA equ 0F38h");
 [; <" ANSELA equ 0F38h ;# ">
@@ -1216,93 +1212,4 @@ Version 4.0 HI-TECH Software Intermediate Code
 "109
 [; ;i2c.c: 109: }
 [e :UE 885 ]
-}
-"111
-[; ;i2c.c: 111: void SONDE_ReadHumidity(uint8_t *humidity) {
-[v _SONDE_ReadHumidity `(v ~T0 @X0 1 ef1`*uc ]
-{
-[e :U _SONDE_ReadHumidity ]
-[v _humidity `*uc ~T0 @X0 1 r1 ]
-[f ]
-"112
-[; ;i2c.c: 112:     uint8_t temp[6];
-[v _temp `uc ~T0 @X0 -> 6 `i a ]
-"114
-[; ;i2c.c: 114:     i2c_start();
-[e ( _i2c_start ..  ]
-"115
-[; ;i2c.c: 115:     i2c_write((0x20 << 1) | 0);
-[e ( _i2c_write (1 -> | << -> 32 `i -> 1 `i -> 0 `i `uc ]
-"116
-[; ;i2c.c: 116:     i2c_write(0x2C);
-[e ( _i2c_write (1 -> -> 44 `i `uc ]
-"117
-[; ;i2c.c: 117:     i2c_write(0x06);
-[e ( _i2c_write (1 -> -> 6 `i `uc ]
-"118
-[; ;i2c.c: 118:     i2c_stop();
-[e ( _i2c_stop ..  ]
-"120
-[; ;i2c.c: 120:     _delay((unsigned long)((500)*(1000000UL/4000.0)));
-[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 1000000 `ul `d .4000.0 `ul ]
-"122
-[; ;i2c.c: 122:     i2c_start();
-[e ( _i2c_start ..  ]
-"123
-[; ;i2c.c: 123:     i2c_write((0x20 << 1) | 1);
-[e ( _i2c_write (1 -> | << -> 32 `i -> 1 `i -> 1 `i `uc ]
-"125
-[; ;i2c.c: 125:     for (uint8_t i = 0; i < 6; i++) {
-{
-[v _i `uc ~T0 @X0 1 a ]
-[e = _i -> -> 0 `i `uc ]
-[e $ < -> _i `i -> 6 `i 890  ]
-[e $U 891  ]
-[e :U 890 ]
-{
-"126
-[; ;i2c.c: 126:         temp[i] = i2c_read();
-[e = *U + &U _temp * -> _i `ux -> -> # *U &U _temp `ui `ux ( _i2c_read ..  ]
-"127
-[; ;i2c.c: 127:         if (i < 5) {
-[e $ ! < -> _i `i -> 5 `i 893  ]
-{
-"128
-[; ;i2c.c: 128:             i2c_ACK();
-[e ( _i2c_ACK ..  ]
-"129
-[; ;i2c.c: 129:         } else {
-}
-[e $U 894  ]
-[e :U 893 ]
-{
-"130
-[; ;i2c.c: 130:             i2c_NAK();
-[e ( _i2c_NAK ..  ]
-"131
-[; ;i2c.c: 131:         }
-}
-[e :U 894 ]
-"132
-[; ;i2c.c: 132:     }
-}
-[e ++ _i -> -> 1 `i `uc ]
-[e $ < -> _i `i -> 6 `i 890  ]
-[e :U 891 ]
-}
-"133
-[; ;i2c.c: 133:     i2c_stop();
-[e ( _i2c_stop ..  ]
-"136
-[; ;i2c.c: 136:     uint16_t SRH;
-[v _SRH `us ~T0 @X0 1 a ]
-"138
-[; ;i2c.c: 138:     SRH = ((uint16_t)temp[3] << 8) | temp[4];
-[e = _SRH -> | << -> -> *U + &U _temp * -> -> -> 3 `i `ui `ux -> -> # *U &U _temp `ui `ux `us `ui -> 8 `i -> *U + &U _temp * -> -> -> 4 `i `ui `ux -> -> # *U &U _temp `ui `ux `ui `us ]
-"140
-[; ;i2c.c: 140:     *humidity = 100 * ((float)SRH / 65535);
-[e = *U _humidity -> * -> -> 100 `i `f / -> _SRH `f -> -> 65535 `l `f `uc ]
-"141
-[; ;i2c.c: 141: }
-[e :UE 889 ]
 }

@@ -9845,7 +9845,6 @@ UINT8_T i2c_read(void);
 void i2c_write(UINT8_T data);
 void i2c_ACK(void);
 void i2c_NAK(void);
-void SONDE_ReadHumidity(uint8_t *humidity);
 # 13 "i2c.c" 2
 
 
@@ -9943,36 +9942,4 @@ void i2c_write(UINT8_T i2cWriteData) {
     PIR1bits.SSP1IF = 0;
     SSP1BUF = i2cWriteData;
     while (!PIR1bits.SSP1IF);
-}
-
-void SONDE_ReadHumidity(uint8_t *humidity) {
-    uint8_t temp[6];
-
-    i2c_start();
-    i2c_write((0x20 << 1) | 0);
-    i2c_write(0x2C);
-    i2c_write(0x06);
-    i2c_stop();
-
-    _delay((unsigned long)((500)*(1000000UL/4000.0)));
-
-    i2c_start();
-    i2c_write((0x20 << 1) | 1);
-
-    for (uint8_t i = 0; i < 6; i++) {
-        temp[i] = i2c_read();
-        if (i < 5) {
-            i2c_ACK();
-        } else {
-            i2c_NAK();
-        }
-    }
-    i2c_stop();
-
-
-    uint16_t SRH;
-
-    SRH = ((uint16_t)temp[3] << 8) | temp[4];
-
-    *humidity = 100 * ((float)SRH / 65535);
 }
