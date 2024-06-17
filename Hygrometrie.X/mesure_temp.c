@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 // PIC18F46K22 Configuration Bit Settings
 
@@ -88,11 +89,31 @@ void I2C_Write_Register(unsigned char reg, unsigned int value) {
     i2c_stop();
 }
 
+bool I2C_Write(uint8_t data) {
+    SSPBUF = data; // Write data to SSPBUF
+    while(SSPSTATbits.BF); // Wait until write cycle is complete
+    while(SSPCON2bits.ACKSTAT); // Wait for ACK/NACK from slave
+    return !SSPCON2bits.ACKSTAT; // Return ACK/NACK status
+}
+
+void I2C_Scan(void) {
+    uint8_t address;
+    for(address = 1; address < 128; address++) {
+        i2c_start();
+        if(I2C_Write(address << 1)) { // Shift address and add R/W bit (0 for write)
+            // If ACK received, print address
+            LCDWriteHexa(7, 0, address);
+        }
+        i2c_stop();
+        __delay_ms(10); // Small delay between each address probe
+    }
+}
+
 int main(int argc, char** argv) {
 
     INT8_T temp, temp2;                             // temperature (1 byte)
     char string[16];
-    char degre[2] = {0xDF, '\0'};            // ASCII code for ° symbol, not known by XC8 compiler, see HD44780 datasheet
+    char degre[2] = {0xDF, '\0'};            // ASCII code for Â° symbol, not known by XC8 compiler, see HD44780 datasheet
 
     LCDInit();
     LCDClear();
@@ -104,6 +125,15 @@ int main(int argc, char** argv) {
     LCDGoto(0, 0);                          // write fixed text to avoid blinking
     strcpy(string, "Watt =   ");
     LCDWriteStr(string);
+    
+    /*while(1) {
+        I2C_Scan();
+        __delay_ms(5000); // Wait 5 seconds before scanning again
+    }
+    
+    while (1) {
+        
+    }*/
 
     forever {
 
@@ -119,7 +149,33 @@ int main(int argc, char** argv) {
         i2c_write(0x00) ;                               // select current register
         i2c_repStart();                                 // send repeated start condition
         i2c_write((TC74_ADDRESS << 1) | I2C_READ);      // send to slave 7-bit address (1001 101) + RD (1)
-//        temp = abs(i2c_read());                         // read temperature (only 0 to 99 degrés Celsius)
+        temp = i2c_read();
+        i2c_ACK();
+        temp2 = i2c_read();
+        i2c_NAK(); // send a NAK (last read)
+        i2c_stop();                                     // send stop condition
+        
+        i2c_start();
+//        temp = abs(i2c_read());                         // read temperature (only 0 to 99 degrÃ©s Celsius)
+        i2c_write((TC74_ADDRESS << 1) | I2C_WRITE);     // send to slave 7-bit address (1001 101) + WR (0)
+        i2c_write(0x09) ;                               // select current register
+        i2c_repStart();                                 // send repeated start condition
+        i2c_write((TC74_ADDRESS << 1) | I2C_READ);      // send to slave 7-bit address (1001 101) + RD (1)
+        
+        INT8_T check_mesure = i2c_read();
+        i2c_NAK(); // send a NAK (last read)
+        i2c_stop();
+        
+        while (check_mesure != 0){
+            _delay(5);
+        }
+        
+        i2c_start();
+        i2c_write((TC74_ADDRESS << 1) | I2C_WRITE);     // send to slave 7-bit address (1001 101) + WR (0)
+        i2c_write(0x00) ;                               // select current register
+        i2c_repStart();                                 // send repeated start condition
+        i2c_write((TC74_ADDRESS << 1) | I2C_READ);      // send to slave 7-bit address (1001 101) + RD (1)
+        
         temp = i2c_read();
         i2c_ACK();
         temp2 = i2c_read();
@@ -132,6 +188,7 @@ int main(int argc, char** argv) {
         LCDGoto(0, 1);
         LCDWriteStr("Pause     ");
         _delay(125000);
+        
     }
 
     return (EXIT_SUCCESS);
