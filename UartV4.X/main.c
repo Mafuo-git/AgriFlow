@@ -87,6 +87,13 @@
     int myvar = 0;
     int myvar2 = 0;
     char buffer[50];
+    int first_car = 0;
+    int incr = 0;
+    char recept[50];
+    char cmp_ok[50] = "ok\r\n";
+    char cmp_acc[50] = "accepted\r\n";
+    char cmp_den[50] = "denied\r\n";
+    char cmp_mac_tx[50] = "mac_tx_ok\r\n";
 
     
 double t_fine;
@@ -136,7 +143,7 @@ void I2C_Scan(void) {
         i2c_start();
         if(I2C_Write(address << 1)) { // Shift address and add R/W bit (0 for write)
             // If ACK received, print address
-            LCDWriteHexa(7, 0, address);
+            //LCDWriteHexa(7, 0, address);
         }
         i2c_stop();
         __delay_ms(10); // Small delay between each address probe
@@ -167,7 +174,7 @@ void BME280_Read_Compensation_Params(void) {
     unsigned int data[6];
 
     i2c_start();
-    i2c_write(0xEC); // Adresse I2C du BME280 en écriture
+    i2c_write(0xEC); // Adresse I2C du BME280 en Ã©criture
     i2c_write(0x88); // Adresse du registre de compensation
     i2c_stop();
 
@@ -181,7 +188,7 @@ void BME280_Read_Compensation_Params(void) {
     i2c_NAK();
     i2c_stop();
 
-    // Convertir les données lues en valeurs de compensation
+    // Convertir les donnÃ©es lues en valeurs de compensation
     compParams.dig_T1 = (unsigned short)((data[1] << 8) | data[0]);
     compParams.dig_T2 = (short)((data[3] << 8) | data[2]);
     compParams.dig_T3 = (short)((data[5] << 8) | data[4]);
@@ -192,8 +199,8 @@ long BME280_Read_Temperature(void) {
     long adc_T;
 
     i2c_start();
-    i2c_write(0xEC); // Adresse I2C du BME280 en écriture
-    i2c_write(0xFA); // Adresse du registre de température MSB
+    i2c_write(0xEC); // Adresse I2C du BME280 en Ã©criture
+    i2c_write(0xFA); // Adresse du registre de tempÃ©rature MSB
     i2c_stop();
 
     i2c_start();
@@ -287,14 +294,22 @@ void __interrupt() SerialRxPinInterrupt() {                         // interrupt
             RCSTA1bits.CREN = SET;
         }
         else {
-            if(debut == 0){
-                txBuffer = UARTReadByte();
-                //PIR1bits.RCIF = 0;           // useless: the flag is automatically cleared when RCREG is read
-                }
-            else{
-                txBuffer = UARTReadByte();
-                //PIR1bits.RCIF = 0;            // useless: the flag is automatically cleared when RCREG is read
-                }
+            recept[i] = UARTReadByte();
+            if (recept[i] != '\n'){
+                i++;
+            }
+         
+            /*txBuffer = UARTReadByte();
+            if (txBuffer == (UINT8_T)'o' || txBuffer == (UINT8_T)'a' || txBuffer == (UINT8_T)'d'){
+                first_car = 1;
+                i = 0;
+                recept[i] = txBuffer;
+            }
+            else {
+                ++i;
+                recept[i] = txBuffer;
+            }*/
+            
         }
     }
 }
@@ -305,7 +320,7 @@ int main(int argc, char** argv) {
     
     INT8_T temp, temp2, hygro1, hygro2, watt1, watt2, temp_soil1, temp_soil2;                             // temperature (1 byte)
     char string[16];
-    char degre[2] = {0xDF, '\0'};            // ASCII code for ° symbol, not known by XC8 compiler, see HD44780 datasheet
+    char degre[2] = {0xDF, '\0'};            // ASCII code for Â° symbol, not known by XC8 compiler, see HD44780 datasheet
     
 
     i2c_init();                             // configuration de l'interface I2C
@@ -326,41 +341,70 @@ int main(int argc, char** argv) {
 
     debut = 1;
     
+    /*cmp_ok[0] = 'o';
+    cmp_ok[1] = 'k';
+    cmp_ok[2] = '\r';
+    cmp_ok[3] = '\n';*/
+    
     UARTWriteStrLn("mac reset 868");
-    while (txBuffer != (UINT8_T)'o'){
+    while (recept[i] != '\n'){
        }
-   
-    txBuffer = CLEAR;
+    while (strcmp(recept, cmp_ok) != 0){
+    }
+    
+    //memset(recept, '\0', 50);
+    i = 0;
         
     UARTWriteStrLn("mac set appkey 9BAA4A6C8E16BB432D4966E34C0F8573");
-    while (txBuffer != (UINT8_T)'o'){
-        }
-      
-    txBuffer = CLEAR;
+    while (recept[i] != '\n'){
+       }
+    while (strcmp(recept, cmp_ok) != 0){
+    }
+    //memset(recept, '\0', 50);
+    i = 0;
         
     UARTWriteStrLn("mac set appeui 23DF314F12FDFE14");
-    while (txBuffer != (UINT8_T)'o'){
-        }
-    txBuffer = CLEAR;
+    while (recept[i] != '\n'){
+       }
+    while (strcmp(recept, cmp_ok) != 0){
+    }
+    //memset(recept, '\0', 50);
+    i = 0;
         
     UARTWriteStrLn("mac set deveui 70B3D57ED0067ED6");
-    while (txBuffer != (UINT8_T)'o'){
-        }
-      
-    txBuffer = CLEAR;
+    while (recept[i] != '\n'){
+       }
+    while (strcmp(recept, cmp_ok) != 0){
+    }
+    //memset(recept, '\0', 50);
+    i = 0;
         
     UARTWriteStrLn("mac save");
-    while (txBuffer != (UINT8_T)'o'){
-        }
-        
-    txBuffer = CLEAR;
+    while (recept[i] != '\n'){
+       }
+    while (strcmp(recept, cmp_ok) != 0){
+    }
+    //memset(recept, '\0', 50);
+    i = 0;
         
     UARTWriteStrLn("mac join otaa");
-    while (txBuffer != (UINT8_T)'a'){
-        if (txBuffer == (UINT8_T)'d') {
+    while (recept[i] != '\n'){
+       }
+    while (strcmp(recept, cmp_ok) != 0){
+    }
+    memset(recept, '\0', 50);
+    i = 0;
+    
+    while (recept[i] != '\n'){
+       }
+    
+    while (strcmp(recept, cmp_acc) != 0){
+        if (strcmp(recept, cmp_den) == 0){
             __asm("RESET");
-            }
         }
+    }
+   
+    i = 0;
         
     txBuffer = CLEAR;
 
@@ -372,7 +416,7 @@ int main(int argc, char** argv) {
         _delay(125000);                         // wait for 125000 Tcy = 125000 * 4us = 0.5 s
         
         /*-------------------------------------*/
-        /* Debut données hygrométrique (sonde) */
+        /* Debut donnÃ©es hygromÃ©trique (sonde) */
         
         i2c_start();                                    // send start condition
         i2c_write((HYGRO_ADDRESS << 1) | I2C_WRITE);     // send to slave 7-bit address (1001 101) + WR (0)
@@ -386,7 +430,7 @@ int main(int argc, char** argv) {
         i2c_stop();                                     // send stop condition
         
         i2c_start();
-//        temp = abs(i2c_read());                         // read temperature (only 0 to 99 degrés Celsius)
+//        temp = abs(i2c_read());                         // read temperature (only 0 to 99 degrÃ©s Celsius)
         i2c_write((HYGRO_ADDRESS << 1) | I2C_WRITE);     // send to slave 7-bit address (1001 101) + WR (0)
         i2c_write(0x09) ;                               // select current register
         i2c_repStart();                                 // send repeated start condition
@@ -412,9 +456,9 @@ int main(int argc, char** argv) {
         i2c_NAK(); // send a NAK (last read)
         i2c_stop();                                     // send stop condition
         
-        /* Fin données hygrométrie (sonde) */
+        /* Fin donnÃ©es hygromÃ©trie (sonde) */
         
-        /* Debut données temperature sonde */
+        /* Debut donnÃ©es temperature sonde */
         
         i2c_start();                                    // send start condition
         i2c_write((HYGRO_ADDRESS << 1) | I2C_WRITE);     // send to slave 7-bit address (1001 101) + WR (0)
@@ -428,7 +472,7 @@ int main(int argc, char** argv) {
         i2c_stop();                                     // send stop condition
         
         i2c_start();
-//        temp = abs(i2c_read());                         // read temperature (only 0 to 99 degrés Celsius)
+//        temp = abs(i2c_read());                         // read temperature (only 0 to 99 degrÃ©s Celsius)
         i2c_write((HYGRO_ADDRESS << 1) | I2C_WRITE);     // send to slave 7-bit address (1001 101) + WR (0)
         i2c_write(0x09) ;                               // select get_busy register
         i2c_repStart();                                 // send repeated start condition
@@ -454,18 +498,18 @@ int main(int argc, char** argv) {
         i2c_NAK(); // send a NAK (last read)
         i2c_stop();                                     // send stop condition
         
-        /* Fin données température sonde */
+        /* Fin donnÃ©es tempÃ©rature sonde */
         
-        /* Fin données sonde */
+        /* Fin donnÃ©es sonde */
         /*-------------------------------------*/
-        /* Debut données wattmètre (INA230) */
+        /* Debut donnÃ©es wattmÃ¨tre (INA230) */
         
         i2c_start();                                    // send start condition
         i2c_write((INA230_ADDRESS << 1) | I2C_WRITE);     // send to slave 7-bit address (1001 101) + WR (0)
         i2c_write(0x04) ;                               // select current register
         i2c_repStart();                                 // send repeated start condition
         i2c_write((INA230_ADDRESS << 1) | I2C_READ);      // send to slave 7-bit address (1001 101) + RD (1)
-//        temp = abs(i2c_read());                         // read temperature (only 0 to 99 degrés Celsius)
+//        temp = abs(i2c_read());                         // read temperature (only 0 to 99 degrÃ©s Celsius)
         watt1 = i2c_read();
         i2c_ACK();
         watt2 = i2c_read();
@@ -475,15 +519,15 @@ int main(int argc, char** argv) {
         //LCDWriteHexa(7, 0, watt1);
         //LCDWriteHexa(9, 0, watt2);
         
-        /* Fin données wattmètre (INA230) */
+        /* Fin donnÃ©es wattmÃ¨tre (INA230) */
         /*------------------------------------*/
-        /* Debut données température (BME280) */
+        /* Debut donnÃ©es tempÃ©rature (BME280) */
         
-        long adc_T = BME280_Read_Temperature(); // Lire la température brute
+        long adc_T = BME280_Read_Temperature(); // Lire la tempÃ©rature brute
 
-        double temp_air = BME280_Compensate_Temperature(adc_T); // Compenser la température
+        double temp_air = BME280_Compensate_Temperature(adc_T); // Compenser la tempÃ©rature
         
-        unsigned long temp_32bit = (unsigned long)(temp_air * 1024 * 1024); // Convertir la valeur double en une valeur entière sur 24 bits
+        unsigned long temp_32bit = (unsigned long)(temp_air * 1024 * 1024); // Convertir la valeur double en une valeur entiÃ¨re sur 24 bits
         unsigned char temp_MSB = (temp_32bit >> 16) & 0xFF; // Extraire le MSB (8 bits de poids fort)
         unsigned char temp_MidSB = (temp_32bit >> 8) & 0xFF; // Extraire les bits du milieu (8 bits)
         unsigned char temp_LSB = temp_32bit & 0xFF; // Extraire le LSB (8 bits de poids faible)
@@ -494,12 +538,12 @@ int main(int argc, char** argv) {
         
         float temp_celsius = (float)temp_air;
         
-        /* Fin données température (BME280) */
+        /* Fin donnÃ©es tempÃ©rature (BME280) */
         
         /* ----------------------------------- */
         
         /* 
-         * Debut envoi données suivant la trame
+         * Debut envoi donnÃ©es suivant la trame
          */
         
         // Send : hygro1, hygro2, 00, 00, 00, 00, 00, 00, temp_soil1, temp_soil2, temp_MSB, temp_MidSB
@@ -507,7 +551,7 @@ int main(int argc, char** argv) {
         
         
         /*
-         * Fin envoi données suivant la trame
+         * Fin envoi donnÃ©es suivant la trame
          */
         
         
@@ -523,14 +567,26 @@ int main(int argc, char** argv) {
         
         int myvar5 = 0x00;
         int myvar6 = 0x00;
+        
+        memset(recept, '\0', 50);
+        i = 0;
 
         sprintf(buffer, "mac tx uncnf 1 %x%x", watt1,watt2);
         UARTWriteStrLn(buffer);
-        while (UARTReadByte() != (UINT8_T)'m'){
+        while (recept[i] != '\n'){
         }
-        while (txBuffer != 0){
-            txBuffer = 0;
-        } 
+        while (strcmp(recept, cmp_ok) != 0){
+        }
+        memset(recept, '\0', 50);
+        i = 0;
+        while (recept[i] != '\n'){
+        }
+        while (strcmp(recept, cmp_mac_tx) != 0){
+        }
+        
+        memset(recept, '\0', 50);
+        i = 0;
+        
 
         
         int compteur = 0;
