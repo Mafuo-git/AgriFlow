@@ -1,0 +1,64 @@
+AgriFlow
+Copyright (c) 2024 Matheo Stephan, Gaspard Crépin, Antoine Chatelain and Matheo Merlin.
+Some rights reserved.
+
+Authors (project team):
+  * Matheo Stephan
+  * Gaspard Crépin
+  * Antoine Chatelain
+  * Matheo Merlin
+
+This work - the source code, documentation, models, figures and other content
+of this repository - is the joint work of the authors listed above and is
+licensed under the
+
+    Creative Commons Attribution-NonCommercial 4.0 International License
+    (CC BY-NC 4.0)
+
+Human-readable summary: https://creativecommons.org/licenses/by-nc/4.0/
+Full legal code (the binding text):
+    https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+-------------------------------------------------------------------------------
+IN SHORT (this summary does not replace the legal code)
+-------------------------------------------------------------------------------
+
+You MAY, for non-commercial purposes only:
+  * use, run and study this work for personal, educational or research use;
+  * copy and share it;
+  * modify it and build your own work on it.
+
+You MUST:
+  * give appropriate credit to ALL the authors whenever you share, publish or
+    present this work or any work based on it (article, video, post, report,
+    repository, website, talk...). Use this attribution:
+
+        "Based on AgriFlow by Matheo Stephan, Gaspard Crépin, Antoine Chatelain and
+        Matheo Merlin (https://github.com/Mafuo-git/AgriFlow), licensed under CC
+        BY-NC 4.0."
+
+  * link to the licence and say whether you made changes;
+  * not suggest that the authors endorse you or your use.
+
+You MAY NOT:
+  * use this work, or any part or adaptation of it, for commercial purposes:
+    no sale, no paid product or service, no integration in a commercial
+    product, no use by or for a company to earn money or gain a commercial
+    advantage, no paid training or consulting based on it, without prior
+    written permission from the authors;
+  * remove or alter this copyright notice, the list of authors, the licence
+    notice or the credits.
+
+Commercial licensing: any commercial use requires a separate written agreement
+with the authors. Contact them through this repository (https://github.com/Mafuo-git/AgriFlow).
+
+-------------------------------------------------------------------------------
+Third-party components
+-------------------------------------------------------------------------------
+Third-party libraries, tools, files and assets used by this project keep
+their own licences and are not covered by this licence.
+
+-------------------------------------------------------------------------------
+No warranty
+-------------------------------------------------------------------------------
+The work is provided "as is", without warranty of any kind.
